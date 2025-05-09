@@ -54,5 +54,13 @@ export class DoctorsService {
     return `Bunday doctor mavjud emas!`;
   }
 
+  async updateRefreshToken(id: number, hashed_refresh_token: string){
+    const updateDoctor = await this.doctorModel.update(
+      {hashed_refresh_token},
+      {where: {id}
+      }
+    )
+    return updateDoctor
+  }
   
 }

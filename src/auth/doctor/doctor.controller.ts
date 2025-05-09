@@ -16,22 +16,22 @@ export class DoctorController {
     return this.doctorService.signInDoctor(signInDoctorDto, res)
   }
 
-//   @HttpCode(200)
-//   @Post("sign-out")
-//   signOut(
-//     @CookieGetter("refresh_token") refreshToken: string,
-//     @Res({passthrough: true}) res: Response
-//   ){
-//     return this.d.signOutPatient(refreshToken, res)
-//   }
+  @HttpCode(200)
+  @Post("sign-out")
+  signOut(
+    @CookieGetter("refresh_token") refreshToken: string,
+    @Res({passthrough: true}) res: Response
+  ){
+    return this.doctorService.signOutDoctor(refreshToken, res)
+  }
 
-//   @HttpCode(200)
-//   @Post(":id/refresh")
-//   refreshPatient(
-//     @Param("id", ParseIntPipe) id: number,
-//     @CookieGetter("refresh_token") refreshToken: string,
-//     @Res({passthrough: true}) res: Response
-//   ){
-//     return this.patientService.refreshTokenPatient(id, refreshToken, res)
-//   }
+  @HttpCode(200)
+  @Post(":id/refresh")
+  refreshDoctor(
+    @Param("id", ParseIntPipe) id: number,
+    @CookieGetter("refresh_token") refreshToken: string,
+    @Res({passthrough: true}) res: Response
+  ){
+    return this.doctorService.refreshTokenDoctor(id, refreshToken, res)
+  }
 }

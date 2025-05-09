@@ -3,22 +3,22 @@ import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from"bcrypt"
 import { Response } from 'express';
-import { DoctorsService } from '../../doctors/doctors.service';
-import { Doctor } from '../../doctors/models/doctor.model';
-import { SignInDoctorDto } from './dto/sign-in-doctor.dto';
+import { StaffsService } from '../../staffs/staffs.service';
+import { Staff } from '../../staffs/models/staff.model';
+import { SignInStaffDto } from './dto/sign-in-staff.dto';
 
 @Injectable()
-export class DoctorService {
+export class StaffService {
     constructor(
-        private readonly doctorService: DoctorsService,
+        private readonly staffsService: StaffsService,
         private readonly jwtService: JwtService
     ){}
 
-    async generateToken(doctor: Doctor){
+    async generateToken(staff: Staff){
         const payload = {
-            id: doctor.id,
-            is_active: doctor.is_active,
-            full_name: doctor.full_name
+            id: staff.id,
+            is_active: staff.is_active,
+            role_id: staff.role_id
         }
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(payload, {
@@ -36,80 +36,81 @@ export class DoctorService {
         }
     }
 
-    async signInDoctor(signInDoctorDto: SignInDoctorDto, res: Response){
-        const doctor = await this.doctorService.findDoctorByEmail(signInDoctorDto.email);
-        console.log(doctor)
-        if(!doctor){
+    
+
+    async signInStaff(signInStaffDto: SignInStaffDto, res: Response){
+        const staff = await this.staffsService.findStaffByEmail(signInStaffDto.email);
+        if(!staff){
             throw new BadRequestException("Email yoki Password noto'g'ri!")
         }
         
-        // if(!doctor.is_active){
+        // if(!staff.is_active){
         //     throw new BadRequestException("Avval emailli tasdiqlang!")
         // }
-        console.log("+++", doctor.hashed_password)
+
         const isValidPassword = await bcrypt.compare(
-            signInDoctorDto.password,
-            doctor.hashed_password
+            signInStaffDto.password,
+            staff.hashed_password
         )
         if(!isValidPassword){
             throw new BadRequestException("Email yoki Password noto'g'ri!")
         }
-        const {accessToken, refreshToken} = await this.generateToken(doctor);
+        const {accessToken, refreshToken} = await this.generateToken(staff);
         res.cookie("refresh_token", refreshToken,{
             httpOnly: true,
             maxAge: Number(process.env.COOKIE_TIME)
         })
-        doctor.hashed_refresh_token = await bcrypt.hash(refreshToken, 7)
-        await doctor.save()   
+        staff.hashed_refresh_token = await bcrypt.hash(refreshToken, 7)
+        await staff.save()   
         return {
             message: "Tizimga xush kelibsiz!",
             accessToken,
         }
     }
 
-    async signOutDoctor(refreshToken: string, res: Response) {
-        const doctorData = await this.jwtService.verify(refreshToken, {
+    async signOutStaff(refreshToken: string, res: Response) {
+        const staffData = await this.jwtService.verify(refreshToken, {
             secret: process.env.REFRESH_TOKEN_KEY
         });
-        if(!doctorData){
-            throw new ForbiddenException("Doctor not verified")
+        if(!staffData){
+            throw new ForbiddenException("Staff not verified")
         }
         const hashed_refresh_token = null
-        await this.doctorService.updateRefreshToken(
-            doctorData.id,
+        await this.staffsService.updateRefreshToken(
+            staffData.id,
             hashed_refresh_token!
         );
         res.clearCookie("refresh_token")
         const response = {
-            message: "Doctor logged succesfully"
+            message: "Staff logged succesfully"
         }
         return response
     }
 
-    async refreshTokenDoctor(doctorId: number, refresh_token: string, res: Response){
+    async refreshTokenStaff(staffId: number, refresh_token: string, res: Response){
         const decodedToken = await this.jwtService.decode(refresh_token)
-        console.log(doctorId)
+        console.log(staffId)
         console.log(decodedToken)
 
-        if(doctorId !== decodedToken["id"]){
+        if(staffId !== decodedToken["id"]){
             throw new ForbiddenException("Ruxsat etilmagan!")
         }
-        const doctor = await this.doctorService.findOne(doctorId)
+        const staff = await this.staffsService.findOne(staffId)
 
-        if(!doctor || !doctor.hashed_refresh_token){
-            throw new NotFoundException("Doctor not found")
+        if(!staff || !staff.hashed_refresh_token){
+            throw new NotFoundException("Staff not found")
         }
 
         const tokenMatch = await bcrypt.compare(
             refresh_token,
-            doctor.hashed_refresh_token
+            staff.hashed_refresh_token
         )
 
         if(!tokenMatch){
             throw new ForbiddenException("Forbidden")
         }
 
-        const {accessToken, refreshToken} = await this.generateToken(doctor)
+        const {accessToken, refreshToken} = await this.generateToken(staff)
         const hashed_refresh_token = await bcrypt.hash(refreshToken, 7)
 
         res.cookie("refresh_token", refreshToken, {
@@ -118,8 +119,8 @@ export class DoctorService {
         })
 
         const response = {
-            message: "Doctor refreshed",
-            doctorId: doctor.id,
+            message: "Staff refreshed",
+            staffId: staff.id,
             access_token: accessToken
         }
         return response

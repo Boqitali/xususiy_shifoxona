@@ -6,12 +6,15 @@ import { PatientsModule } from '../patients/patients.module';
 import { DoctorController } from './doctor/doctor.controller';
 import { DoctorService } from './doctor/doctor.service';
 import { DoctorsModule } from '../doctors/doctors.module';
+import { StaffService } from './staff/staff.service';
+import { StaffController } from './staff/staff.controller';
+import { StaffsModule } from '../staffs/staffs.module';
 
 @Module({
   imports: [JwtModule.register({global: true}), 
-    PatientsModule, DoctorsModule
+    PatientsModule, DoctorsModule, StaffsModule
   ],
-  controllers: [PatientController, DoctorController],
-  providers: [PatientService, DoctorService],
+  controllers: [PatientController, DoctorController, StaffController],
+  providers: [PatientService, DoctorService, StaffService],
 })
 export class AuthModule {}

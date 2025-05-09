@@ -27,6 +27,10 @@ export class StaffsService {
     return this.staffModel.create({...createStaffDto, hashed_password});
   }
 
+  findStaffByEmail(email: string) {
+    return this.staffModel.findOne({where: {email}});
+  }
+
   findAll() {
     return this.staffModel.findAll({include: {all: true}});
   }
@@ -48,4 +52,15 @@ export class StaffsService {
     }
     return `Bunday staff mavjud emas!`;
   }
+
+
+  async updateRefreshToken(id: number, hashed_refresh_token: string){
+    const updateStaff = await this.staffModel.update(
+      {hashed_refresh_token},
+      {where: {id}
+      }
+    )
+    return updateStaff
+  }
+
 }

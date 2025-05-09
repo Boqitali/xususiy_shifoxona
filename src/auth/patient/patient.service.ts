@@ -91,7 +91,7 @@ export class PatientService {
         );
         res.clearCookie("refresh_token")
         const response = {
-            message: "patient logged succesfully"
+            message: "Patient logged succesfully"
         }
         return response
     }
