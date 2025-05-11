@@ -92,12 +92,12 @@ import {
     declare hashed_refresh_token: string;
 
     @ApiProperty({
-        example: false,
+        example: true,
         description: "Xodimning faolligi",
       })
     @Column({
         type: DataType.BOOLEAN,
-        defaultValue: false,
+        defaultValue: true,
       })
     declare is_active: boolean;
     

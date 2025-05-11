@@ -7,6 +7,8 @@ import { Patient } from './models/patient.model';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { PatientGuard } from '../common/guards/patient.guard';
 import { PatientSelfGuard } from '../common/guards/patinet-self.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/rols.auth-decorator';
 
 @Controller('patients')
 export class PatientsController {
@@ -24,7 +26,8 @@ export class PatientsController {
   }
 
   
-  @UseGuards(PatientGuard)
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha bemorlarni olish"})
   @ApiResponse({
@@ -38,6 +41,7 @@ export class PatientsController {
   }
   
   @UseGuards(PatientSelfGuard)
+  @UseGuards(PatientGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Bemorlarni id bilan olish"})
   @ApiResponse({
@@ -51,6 +55,7 @@ export class PatientsController {
   }
 
   @UseGuards(PatientSelfGuard)
+  @UseGuards(PatientGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Bemorlarni id bilan yangilash"})
   @ApiResponse({
@@ -63,6 +68,9 @@ export class PatientsController {
     return this.patientsService.update(+id, updatePatientDto);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Bemorlarni id bilan o'chirish"})
   @ApiResponse({
     status: 200,

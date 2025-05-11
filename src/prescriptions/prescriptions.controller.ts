@@ -1,14 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { PrescriptionsService } from './prescriptions.service';
 import { CreatePrescriptionDto } from './dto/create-prescription.dto';
 import { UpdatePrescriptionDto } from './dto/update-prescription.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Prescription } from './models/prescription.model';
+import { Roles } from '../common/decorators/rols.auth-decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { AuthGuard } from '../common/guards/auth.guard';
 
 @Controller('prescriptions')
 export class PrescriptionsController {
   constructor(private readonly prescriptionsService: PrescriptionsService) {}
 
+  @Roles("superadmin", "admin", "doctor")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Prescription qo'shish"})
   @ApiResponse({
     status: 201,
@@ -20,6 +26,9 @@ export class PrescriptionsController {
     return this.prescriptionsService.create(createPrescriptionDto);
   }
 
+  @Roles("superadmin", "admin", "doctor")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha prescriptionlarni olish"})
   @ApiResponse({
     status: 200,
@@ -31,6 +40,9 @@ export class PrescriptionsController {
     return this.prescriptionsService.findAll();
   }
 
+  @Roles("superadmin", "admin", "doctor")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha prescriptionlarni olish"})
   @ApiResponse({
     status: 200,
@@ -42,6 +54,9 @@ export class PrescriptionsController {
     return this.prescriptionsService.findOne(+id);
   }
 
+  @Roles("superadmin", "admin", "doctor")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha prescriptionni yangilash"})
   @ApiResponse({
     status: 200,
@@ -53,6 +68,9 @@ export class PrescriptionsController {
     return this.prescriptionsService.update(+id, updatePrescriptionDto);
   }
 
+  @Roles("superadmin", "admin", "doctor")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha prescriptionni o'chirish"})
   @ApiResponse({
     status: 200,

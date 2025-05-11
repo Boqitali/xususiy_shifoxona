@@ -1,14 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Payment } from './models/payment.model';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/rols.auth-decorator';
 
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
+  @Roles("patient", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Payment qo'shish"})
   @ApiResponse({
     status: 201,
@@ -20,6 +26,9 @@ export class PaymentsController {
     return this.paymentsService.create(createPaymentDto);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha paymentlarini olish"})
   @ApiResponse({
     status: 200,
@@ -31,6 +40,9 @@ export class PaymentsController {
     return this.paymentsService.findAll();
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Paymentlarini id bilan olish"})
   @ApiResponse({
     status: 200,
@@ -42,6 +54,9 @@ export class PaymentsController {
     return this.paymentsService.findOne(+id);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Paymentlarini id bilan yangilash"})
   @ApiResponse({
     status: 200,
@@ -53,6 +68,9 @@ export class PaymentsController {
     return this.paymentsService.update(+id, updatePaymentDto);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Paymentlarini id bilan o'chirish"})
   @ApiResponse({
     status: 200,

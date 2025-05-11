@@ -7,11 +7,16 @@ import { Doctor } from './models/doctor.model';
 import { DoctorGuard } from '../common/guards/doctor.guard';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { DoctorSelfGuard } from '../common/guards/doctor-self.guard';
+import { Roles } from '../common/decorators/rols.auth-decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
 
 @Controller('doctors')
 export class DoctorsController {
   constructor(private readonly doctorsService: DoctorsService) {}
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Doctorlarni qo'shish"})
   @ApiResponse({
     status: 201,
@@ -23,7 +28,8 @@ export class DoctorsController {
     return this.doctorsService.create(createDoctorDto);
   }
 
-  @UseGuards(DoctorGuard)
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha doctorlarni olish"})
   @ApiResponse({
@@ -37,6 +43,7 @@ export class DoctorsController {
   }
 
   @UseGuards(DoctorSelfGuard)
+  @UseGuards(DoctorGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Doctorni id bilan olish"})
   @ApiResponse({
@@ -50,6 +57,7 @@ export class DoctorsController {
   }
 
   @UseGuards(DoctorSelfGuard)
+  @UseGuards(DoctorGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Doctorni id bilan yangilash"})
   @ApiResponse({
@@ -62,6 +70,9 @@ export class DoctorsController {
     return this.doctorsService.update(+id, updateDoctorDto);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Doctorni id bilan o'chirish"})
   @ApiResponse({
     status: 200,

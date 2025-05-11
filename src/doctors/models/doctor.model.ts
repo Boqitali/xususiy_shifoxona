@@ -89,12 +89,12 @@ export class Doctor extends Model<Doctor, IDoctorCreationAttr> {
   declare hashed_refresh_token: string;
 
   @ApiProperty({
-    example: false,
+    example: true,
     description: "Doctorning faolligi",
   })
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: false,
+    defaultValue: true,
   })
   declare is_active: boolean;
 

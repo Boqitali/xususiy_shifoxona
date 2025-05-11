@@ -1,14 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { LabTestsService } from './lab_tests.service';
 import { CreateLabTestDto } from './dto/create-lab_test.dto';
 import { UpdateLabTestDto } from './dto/update-lab_test.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LabTest } from './models/lab_test.model';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/rols.auth-decorator';
 
 @Controller('lab-tests')
 export class LabTestsController {
   constructor(private readonly labTestsService: LabTestsService) {}
 
+  @Roles("superadmin", "admin", "doctor")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "LabTest qo'shish"})
   @ApiResponse({
     status: 201,
@@ -20,6 +26,9 @@ export class LabTestsController {
     return this.labTestsService.create(createLabTestDto);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha labTestlarni olish"})
   @ApiResponse({
     status: 200,
@@ -31,6 +40,9 @@ export class LabTestsController {
     return this.labTestsService.findAll();
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "LabTestlarni id bilan olish"})
   @ApiResponse({
     status: 200,
@@ -42,6 +54,9 @@ export class LabTestsController {
     return this.labTestsService.findOne(+id);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "LabTestlarni yagilash"})
   @ApiResponse({
     status: 200,
@@ -53,6 +68,9 @@ export class LabTestsController {
     return this.labTestsService.update(+id, updateLabTestDto);
   }
 
+  @Roles("superadmin", "admin")
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "LabTestlarni o'chirish"})
   @ApiResponse({
     status: 200,

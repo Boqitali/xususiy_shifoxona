@@ -23,7 +23,7 @@ export class RolesGuard implements CanActivate {
     if (!requiredRoles) {
       return true;
     }
-    const roles = Array.isArray(req.person.role) ? req.person.role : [req.person.role];
+    const roles = Array.isArray(req.user.role) ? req.user.role : [req.user.role];
 
     const permission = roles.some((role: any) =>
       requiredRoles.includes(role),
