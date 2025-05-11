@@ -3,7 +3,6 @@ import { CreateStaffDto } from './dto/create-staff.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Staff } from './models/staff.model';
-import { RolesService } from '../roles/roles.service';
 
 import * as bcrypt from "bcrypt"
 
@@ -11,19 +10,14 @@ import * as bcrypt from "bcrypt"
 export class StaffsService {
   constructor(
     @InjectModel(Staff) private readonly staffModel: typeof Staff,
-    private readonly roleService: RolesService
   ){}
   async create(createStaffDto: CreateStaffDto) {
-    const {password, confirm_password, role_id} = createStaffDto
+    const {password, confirm_password,} = createStaffDto
     if(password !== confirm_password){
       throw new BadRequestException("Parollar mos emas!")
     }
     const hashed_password = await bcrypt.hash(password, 7)
 
-    const role = await this.roleService.findOne(role_id);
-    if (!role) {
-      throw new BadRequestException('Bunday role mavjud emas!');
-    }
     return this.staffModel.create({...createStaffDto, hashed_password});
   }
 

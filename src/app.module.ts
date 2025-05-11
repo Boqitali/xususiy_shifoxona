@@ -3,8 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { PatientsModule } from './patients/patients.module';
 import { Patient } from './patients/models/patient.model';
-import { RolesModule } from './roles/roles.module';
-import { Role } from './roles/models/role.model';
 import { SpecializationModule } from './specialization/specialization.module';
 import { Specialization } from './specialization/models/specialization.model';
 import { DepartmentsModule } from './departments/departments.module';
@@ -43,7 +41,6 @@ import { MailModule } from './mail/mail.module';
       database:process.env.PG_DB,
       models:[
         Patient, 
-        Role, 
         Specialization, 
         Department, 
         Medication, 
@@ -61,7 +58,6 @@ import { MailModule } from './mail/mail.module';
       logging: false,
     }),
     PatientsModule,
-    RolesModule,
     SpecializationModule,
     DepartmentsModule,
     MedicationsModule,

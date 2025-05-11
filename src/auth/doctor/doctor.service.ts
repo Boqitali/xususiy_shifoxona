@@ -18,7 +18,8 @@ export class DoctorService {
         const payload = {
             id: doctor.id,
             is_active: doctor.is_active,
-            full_name: doctor.full_name
+            full_name: doctor.full_name,
+            role: "doctor"
         }
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(payload, {

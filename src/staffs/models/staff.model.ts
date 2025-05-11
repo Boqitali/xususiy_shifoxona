@@ -2,12 +2,9 @@ import {
     Table,
     Column,
     DataType,
-    ForeignKey,
     Model,
-    BelongsTo,
   } from 'sequelize-typescript';
   import { ApiProperty } from '@nestjs/swagger';
-  import { Role } from '../../roles/models/role.model';
   
   interface IStaffCreationAttr {
     first_name: string;
@@ -15,7 +12,7 @@ import {
     email: string;
     phone: string;
     hashed_password: string;
-    role_id: number;
+    role: string;
   }
   
   @Table({ tableName: 'staff', timestamps: false })
@@ -106,16 +103,12 @@ import {
     
     @ApiProperty({
       example: 1,
-      description: "Xodimning roli ID raqami",
+      description: "roli admin/superadmin",
     })
-    @ForeignKey(() => Role)
     @Column({
-      type: DataType.INTEGER,
+      type: DataType.STRING(30),
       allowNull: false,
     })
-    declare role_id: number;
-
-    @BelongsTo(() => Role)
-    role: Role
+    declare role: string;
   }
   

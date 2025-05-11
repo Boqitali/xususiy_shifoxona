@@ -18,7 +18,7 @@ export class StaffService {
         const payload = {
             id: staff.id,
             is_active: staff.is_active,
-            role_id: staff.role_id
+            role: staff.role
         }
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(payload, {

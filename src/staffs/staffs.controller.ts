@@ -20,6 +20,7 @@ export class StaffsController {
     return this.staffsService.create(createStaffDto);
   }
 
+  
   @ApiOperation({summary: "Barcha stafflarni olish"})
   @ApiResponse({
     status: 200,

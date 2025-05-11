@@ -59,10 +59,10 @@ export class CreateStaffDto {
   confirm_password: string;
 
   @ApiProperty({
-    description: "Xodimning roli ID raqami",
-    example: 1,
+    description: "roli admin/superadmin",
+    example: "role",
   })
-  @IsNumber({}, { message: "Role ID son bo'lishi kerak" })
-  @IsNotEmpty({ message: "Role ID kiritilishi majburiy" })
-  role_id: number;
+  @IsString({ message: "Role matn bo'lishi kerak" })
+  @IsNotEmpty({ message: "Role string kiritilishi majburiy" })
+  role: string;
 }

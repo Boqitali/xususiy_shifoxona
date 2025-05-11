@@ -7,5 +7,5 @@ export class UpdateStaffDto extends PartialType(CreateStaffDto) {
     email: string;
     phone: string;
     hashed_password: string;
-    role_id: number;
+    role: string;
 }

@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards } from '@nestjs/common';
 import { DoctorsService } from './doctors.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Doctor } from './models/doctor.model';
+import { DoctorGuard } from '../common/guards/doctor.guard';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { DoctorSelfGuard } from '../common/guards/doctor-self.guard';
 
 @Controller('doctors')
 export class DoctorsController {
@@ -20,6 +23,8 @@ export class DoctorsController {
     return this.doctorsService.create(createDoctorDto);
   }
 
+  @UseGuards(DoctorGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha doctorlarni olish"})
   @ApiResponse({
     status: 200,
@@ -31,6 +36,8 @@ export class DoctorsController {
     return this.doctorsService.findAll();
   }
 
+  @UseGuards(DoctorSelfGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Doctorni id bilan olish"})
   @ApiResponse({
     status: 200,
@@ -42,6 +49,8 @@ export class DoctorsController {
     return this.doctorsService.findOne(+id);
   }
 
+  @UseGuards(DoctorSelfGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: "Doctorni id bilan yangilash"})
   @ApiResponse({
     status: 200,

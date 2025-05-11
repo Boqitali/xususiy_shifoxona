@@ -19,7 +19,8 @@ export class PatientService {
         const payload = {
             id: patient.id,
             is_active: patient.is_active,
-            full_name: patient.full_name
+            full_name: patient.full_name,
+            role: "patient"
         }
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync(payload, {
