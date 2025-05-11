@@ -12,7 +12,7 @@ import { Roles } from '../common/decorators/rols.auth-decorator';
 export class StaffsController {
   constructor(private readonly staffsService: StaffsService) {}
 
-  @Roles("superadmin", "direktir")
+  @Roles("superadmin", "direktor")
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Stafflarni qo'shish"})
@@ -26,7 +26,7 @@ export class StaffsController {
     return this.staffsService.create(createStaffDto);
   }
 
-  @Roles("superadmin", "direktir")
+  @Roles("superadmin", "direktor")
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Barcha stafflarni olish"})
@@ -40,7 +40,7 @@ export class StaffsController {
     return this.staffsService.findAll();
   }
 
-  @Roles("superadmin", "direktir")
+  @Roles("superadmin", "direktor")
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Staffni id bilan olish"})
@@ -54,7 +54,7 @@ export class StaffsController {
     return this.staffsService.findOne(+id);
   }
 
-  @Roles("superadmin", "direktir")
+  @Roles("superadmin", "direktor")
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Staffni id bilan yangilash"})
@@ -68,7 +68,7 @@ export class StaffsController {
     return this.staffsService.update(+id, updateStaffDto);
   }
 
-  @Roles("superadmin", "direktir")
+  @Roles("superadmin", "direktor")
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @ApiOperation({summary: "Staffni id bilan o'chirish"})
