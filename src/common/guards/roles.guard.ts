@@ -14,7 +14,7 @@ export class RolesGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    //logika
+
     const req = context.switchToHttp().getRequest();
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(
       ROLES_KEY,

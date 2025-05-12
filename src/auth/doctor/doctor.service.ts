@@ -44,10 +44,7 @@ export class DoctorService {
             throw new BadRequestException("Email yoki Password noto'g'ri!")
         }
         
-        // if(!doctor.is_active){
-        //     throw new BadRequestException("Avval emailli tasdiqlang!")
-        // }
-        console.log("+++", doctor.hashed_password)
+        
         const isValidPassword = await bcrypt.compare(
             signInDoctorDto.password,
             doctor.hashed_password
